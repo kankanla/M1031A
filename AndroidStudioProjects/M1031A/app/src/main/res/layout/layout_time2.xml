@@ -10,9 +10,7 @@
         android:layout_weight="9"
         android:gravity="center"
         android:text="@string/temp"
-        android:textAlignment="center"
-        android:textSize="300sp"
-        android:textStyle="bold" />
+        android:textSize="160sp" />
 
     <TextView
         android:id="@+id/SECOND"
@@ -21,7 +19,5 @@
         android:layout_weight="1"
         android:gravity="bottom"
         android:text="@string/temp"
-        android:textAllCaps="true"
-        android:textSize="120sp"
-        android:textStyle="bold" />
+        android:textSize="80sp" />
 </LinearLayout>

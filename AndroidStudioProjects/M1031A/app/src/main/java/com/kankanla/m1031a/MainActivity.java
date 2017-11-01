@@ -2,6 +2,7 @@ package com.kankanla.m1031a;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
         App_set();
         SHORT = findViewById(R.id.SHORT);
         SECOND = findViewById(R.id.SECOND);
+
+        //http://www.fonts4free.net/
+        //http://www.fonts4free.net/oreos-font.html
+        SHORT.setTypeface(Typeface.createFromAsset(getAssets(),"PLOK____.TTF"));
+        SECOND.setTypeface(Typeface.createFromAsset(getAssets(),"PLOK____.TTF"));
+
         handler = new Handler();
         timer = new Timer();
     }
