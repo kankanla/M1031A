@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private WindowManager.LayoutParams lp;
     private int set_back = 1;
     private DateFormat dateFormat, dateFormat1, dateFormat2;
+    private SimpleDateFormat simpleDateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
         dateFormat1 = DateFormat.getTimeInstance(DateFormat.MEDIUM);
         dateFormat2 = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
+        simpleDateFormat = new SimpleDateFormat("ss");
         App_set();
         SHORT = findViewById(R.id.SHORT);
         SECOND = findViewById(R.id.SECOND);
@@ -55,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
                         calendar = Calendar.getInstance();
                         Date date = calendar.getTime();
                         SHORT.setText(String.valueOf(dateFormat.format(date)));
-                        SECOND.setText(String.valueOf(calendar.get(Calendar.SECOND)));
+//                        SECOND.setText(String.valueOf(calendar.get(Calendar.SECOND)));
+                        SECOND.setText(simpleDateFormat.format(date));
                         setTitle(String.valueOf(dateFormat2.format(date)));
                         String temp = dateFormat1.format(date);
                         if (temp.compareTo("9:16:00") > 0 && temp.compareTo("18:06:00") < 0) {
