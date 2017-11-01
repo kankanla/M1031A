@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         SECOND.setText(String.valueOf(calendar.get(Calendar.SECOND)));
                         setTitle(String.valueOf(dateFormat2.format(date)));
                         String temp = dateFormat1.format(date);
-                        if (temp.compareTo("9:16:00") > 0 && temp.compareTo("18:08:00") < 0) {
+                        if (temp.compareTo("9:16:00") > 0 && temp.compareTo("18:06:00") < 0) {
                             set_HIGH();
                             set_back = 0;
                         } else {
