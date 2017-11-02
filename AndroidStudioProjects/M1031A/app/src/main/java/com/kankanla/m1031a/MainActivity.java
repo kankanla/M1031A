@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private WindowManager.LayoutParams lp;
     private int set_back = 1;
     private DateFormat dateFormat, dateFormat1, dateFormat2;
-    private SimpleDateFormat simpleDateFormat;
+    private SimpleDateFormat simpleDateFormat, simpleDateFormat2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +36,27 @@ public class MainActivity extends AppCompatActivity {
         dateFormat1 = DateFormat.getTimeInstance(DateFormat.MEDIUM);
         dateFormat2 = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
         simpleDateFormat = new SimpleDateFormat("ss");
+        simpleDateFormat2 = new SimpleDateFormat("E");
         App_set();
         SHORT = findViewById(R.id.SHORT);
         SECOND = findViewById(R.id.SECOND);
+//        SHORT.setBackgroundColor(Color.YELLOW);
+//        SHORT.setTextColor(Color.RED);
 
-        //http://www.fonts4free.net/
-        //http://www.fonts4free.net/oreos-font.html
-        SHORT.setTypeface(Typeface.createFromAsset(getAssets(),"PLOK____.TTF"));
-        SECOND.setTypeface(Typeface.createFromAsset(getAssets(),"PLOK____.TTF"));
+//        http://www.fonts4free.net/
+//        http://www.fonts4free.net/oreos-font.html
+//        SHORT.setTypeface(Typeface.createFromAsset(getAssets(),"PLOK____.TTF"));
+//        SHORT.setTypeface(Typeface.createFromAsset(getAssets(),"Royalacid_o.ttf"));
+//        SHORT.setTypeface(Typeface.createFromAsset(getAssets(),"PWFlymetothemoon.ttf"));
+//        SHORT.setTypeface(Typeface.createFromAsset(getAssets(), "hassle.ttf"));
+        SHORT.setTypeface(Typeface.createFromAsset(getAssets(), "hassle.ttf"));
+
+//        SECOND.setTypeface(Typeface.createFromAsset(getAssets(),"PLOK____.TTF"));
+//        SECOND.setTypeface(Typeface.createFromAsset(getAssets(),"PWFlymetothemoon.ttf"));
+//        SECOND.setTypeface(Typeface.createFromAsset(getAssets(),"Royalacid_o.ttf"));
+//        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "hassle.ttf"));
+//        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "heroesassembledings.ttf"));
+        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "NINJAS.TTF"));
 
         handler = new Handler();
         timer = new Timer();
@@ -65,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
                         calendar = Calendar.getInstance();
                         Date date = calendar.getTime();
                         SHORT.setText(String.valueOf(dateFormat.format(date)));
-//                        SECOND.setText(String.valueOf(calendar.get(Calendar.SECOND)));
                         SECOND.setText(simpleDateFormat.format(date));
                         setTitle(String.valueOf(dateFormat2.format(date)));
                         String temp = dateFormat1.format(date);
-                        if (temp.compareTo("9:16:00") > 0 && temp.compareTo("18:06:00") < 0) {
+
+                        if (temp.compareTo("9:20:00") > 0 && temp.compareTo("18:05:00") < 0) {
                             set_HIGH();
                             set_back = 0;
                         } else {
@@ -80,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         };
-        timer.schedule(timerTask, 0, 1000);
+        timer.schedule(timerTask, 0, 50);
     }
 
     protected void set_LOW() {
@@ -98,14 +111,16 @@ public class MainActivity extends AppCompatActivity {
 
     protected void set_HIGH() {
         if (set_back == 1) {
-            lp.screenBrightness = 1.0F;
-            System.out.println("1.0f");
-            SHORT.setBackgroundColor(Color.WHITE);
-            SECOND.setBackgroundColor(Color.WHITE);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().show();
+            if (calendar.get(Calendar.DAY_OF_WEEK) > Calendar.SUNDAY && calendar.get(Calendar.DAY_OF_WEEK) < Calendar.SATURDAY) {
+                lp.screenBrightness = 1.0F;
+                System.out.println("1.0f");
+                SHORT.setBackgroundColor(Color.WHITE);
+                SECOND.setBackgroundColor(Color.WHITE);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().show();
+                }
+                getWindow().setAttributes(lp);
             }
-            getWindow().setAttributes(lp);
         }
     }
 
