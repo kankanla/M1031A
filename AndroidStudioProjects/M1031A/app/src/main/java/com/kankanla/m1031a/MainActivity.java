@@ -6,6 +6,8 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private Timer timer;
     private TimerTask timerTask;
     private WindowManager.LayoutParams lp;
-    private int set_back = 1;
+    private int set_back;
     private DateFormat dateFormat, dateFormat1, dateFormat2;
     private SimpleDateFormat simpleDateFormat, simpleDateFormat2;
 
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         App_set();
         SHORT = findViewById(R.id.SHORT);
         SECOND = findViewById(R.id.SECOND);
+
 //        SHORT.setBackgroundColor(Color.YELLOW);
 //        SHORT.setTextColor(Color.RED);
 
@@ -62,10 +65,24 @@ public class MainActivity extends AppCompatActivity {
         timer = new Timer();
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
         time_show_2();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(getString(R.string.FontSize));
+        menu.add(getString(R.string.Second_Font_Size));
+        menu.add(1, 2, 3, getString(R.string.FontSize));
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     protected void time_show_2() {
@@ -81,13 +98,10 @@ public class MainActivity extends AppCompatActivity {
                         SECOND.setText(simpleDateFormat.format(date));
                         setTitle(String.valueOf(dateFormat2.format(date)));
                         String temp = dateFormat1.format(date);
-
-                        if (temp.compareTo("9:20:00") > 0 && temp.compareTo("18:05:00") < 0) {
+                        if (temp.compareTo("09:20:00") > 0 && temp.compareTo("18:03:00") < 0) {
                             set_HIGH();
-                            set_back = 0;
                         } else {
                             set_LOW();
-                            set_back = 1;
                         }
                     }
                 });
@@ -97,30 +111,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void set_LOW() {
-        if (set_back == 0) {
-            lp.screenBrightness = 0.1F;
-            System.out.println("0.001f");
-            SHORT.setBackgroundColor(Color.BLACK);
-            SECOND.setBackgroundColor(Color.BLACK);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().hide();
-            }
-            getWindow().setAttributes(lp);
+        lp.screenBrightness = 0.1F;
+        SHORT.setBackgroundColor(Color.BLACK);
+        SECOND.setBackgroundColor(Color.BLACK);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
         }
+        getWindow().setAttributes(lp);
     }
 
     protected void set_HIGH() {
-        if (set_back == 1) {
-            if (calendar.get(Calendar.DAY_OF_WEEK) > Calendar.SUNDAY && calendar.get(Calendar.DAY_OF_WEEK) < Calendar.SATURDAY) {
-                lp.screenBrightness = 1.0F;
-                System.out.println("1.0f");
-                SHORT.setBackgroundColor(Color.WHITE);
-                SECOND.setBackgroundColor(Color.WHITE);
-                if (getSupportActionBar() != null) {
-                    getSupportActionBar().show();
-                }
-                getWindow().setAttributes(lp);
+        if (calendar.get(Calendar.DAY_OF_WEEK) > Calendar.SUNDAY && calendar.get(Calendar.DAY_OF_WEEK) < Calendar.SATURDAY) {
+            lp.screenBrightness = 1.0F;
+            SHORT.setBackgroundColor(Color.WHITE);
+            SECOND.setBackgroundColor(Color.TRANSPARENT);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().show();
             }
+            getWindow().setAttributes(lp);
         }
     }
 
