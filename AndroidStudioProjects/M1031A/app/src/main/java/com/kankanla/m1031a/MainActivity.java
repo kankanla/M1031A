@@ -26,8 +26,11 @@ public class MainActivity extends AppCompatActivity {
     private TimerTask timerTask;
     private WindowManager.LayoutParams lp;
     private int set_back;
-    private DateFormat dateFormat, dateFormat1, dateFormat2;
+    private DateFormat dateFormat, dateFormat2;
     private SimpleDateFormat simpleDateFormat, simpleDateFormat2;
+    private String start_time;
+    private String end_time;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +38,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.layout_time2);
         lp = getWindow().getAttributes();
         dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-        dateFormat1 = DateFormat.getTimeInstance(DateFormat.MEDIUM);
         dateFormat2 = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
         simpleDateFormat = new SimpleDateFormat("ss");
-        simpleDateFormat2 = new SimpleDateFormat("E");
-        App_set();
+        simpleDateFormat2 = new SimpleDateFormat("HHmmss");
+        handler = new Handler();
+        timer = new Timer();
         SHORT = findViewById(R.id.SHORT);
         SECOND = findViewById(R.id.SECOND);
+        App_set();
+
+        setStart_time("092000");
+        setEnd_time("180500");
 
 //        SHORT.setBackgroundColor(Color.YELLOW);
 //        SHORT.setTextColor(Color.RED);
@@ -60,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
 //        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "hassle.ttf"));
 //        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "heroesassembledings.ttf"));
         SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "NINJAS.TTF"));
-
-        handler = new Handler();
-        timer = new Timer();
     }
 
 
@@ -97,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
                         SHORT.setText(String.valueOf(dateFormat.format(date)));
                         SECOND.setText(simpleDateFormat.format(date));
                         setTitle(String.valueOf(dateFormat2.format(date)));
-                        String temp = dateFormat1.format(date);
-                        if (temp.compareTo("09:20:00") > 0 && temp.compareTo("18:03:00") < 0) {
+                        String temp = simpleDateFormat2.format(date);
+                        if (temp.compareTo(start_time) > 0 && temp.compareTo(end_time) < 0) {
                             set_HIGH();
                         } else {
                             set_LOW();
@@ -107,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         };
-        timer.schedule(timerTask, 0, 50);
+        timer.schedule(timerTask, 0, 500);
     }
 
     protected void set_LOW() {
@@ -138,5 +142,13 @@ public class MainActivity extends AppCompatActivity {
 
         //横画面は以下を指定
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    public void setEnd_time(String end_time) {
+        this.end_time = end_time;
+    }
+
+    public void setStart_time(String start_time) {
+        this.start_time = start_time;
     }
 }
