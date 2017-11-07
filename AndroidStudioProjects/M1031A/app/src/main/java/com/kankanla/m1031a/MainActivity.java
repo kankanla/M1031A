@@ -1,11 +1,19 @@
 package com.kankanla.m1031a;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Network;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -17,6 +25,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static android.app.Notification.CATEGORY_MESSAGE;
+import static android.content.Context.*;
 
 public class MainActivity extends AppCompatActivity {
     private TextView SHORT, SECOND;
@@ -30,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private SimpleDateFormat simpleDateFormat, simpleDateFormat2;
     private String start_time;
     private String end_time;
+    private String ipadd;
 
 
     @Override
@@ -46,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         SHORT = findViewById(R.id.SHORT);
         SECOND = findViewById(R.id.SECOND);
         App_set();
+        get_MAC_IP();
 
         setStart_time("092000");
         setEnd_time("180500");
@@ -100,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         Date date = calendar.getTime();
                         SHORT.setText(String.valueOf(dateFormat.format(date)));
                         SECOND.setText(simpleDateFormat.format(date));
-                        setTitle(String.valueOf(dateFormat2.format(date)));
+                        setTitle(String.valueOf(dateFormat2.format(date)) + "     " + ipadd);
                         String temp = simpleDateFormat2.format(date);
                         if (temp.compareTo(start_time) > 0 && temp.compareTo(end_time) < 0) {
                             set_HIGH();
@@ -115,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void set_LOW() {
-        lp.screenBrightness = 0.1F;
+        lp.screenBrightness = 0.01F;
         SHORT.setBackgroundColor(Color.BLACK);
         SECOND.setBackgroundColor(Color.BLACK);
         if (getSupportActionBar() != null) {
@@ -151,4 +164,33 @@ public class MainActivity extends AppCompatActivity {
     public void setStart_time(String start_time) {
         this.start_time = start_time;
     }
+
+    protected void check_node() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Notification.Builder builder = new Notification.Builder(this, "aa");
+        }
+    }
+
+    protected void get_MAC_IP() {
+        WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        System.out.println("-------------------------------------------");
+        System.out.println(wifiInfo.getMacAddress());
+        System.out.println(wifiInfo);
+        System.out.println("-------------------------------------------");
+
+        int ipAddress = wifiInfo.getIpAddress();
+        System.out.println(wifiInfo.getIpAddress());
+
+        String strIPAddess =
+                ((ipAddress >> 0) & 0xFF) + "." +
+                        ((ipAddress >> 8) & 0xFF) + "." +
+                        ((ipAddress >> 16) & 0xFF) + "." +
+                        ((ipAddress >> 24) & 0xFF);
+        Log.v("IP Address", strIPAddess);
+        ipadd = strIPAddess;
+    }
+
+
 }
