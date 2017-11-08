@@ -1,13 +1,10 @@
 package com.kankanla.m1031a;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Network;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
@@ -26,9 +23,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static android.app.Notification.CATEGORY_MESSAGE;
-import static android.content.Context.*;
-
 public class MainActivity extends AppCompatActivity {
     private TextView SHORT, SECOND;
     private Calendar calendar;
@@ -36,12 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private Timer timer;
     private TimerTask timerTask;
     private WindowManager.LayoutParams lp;
-    private int set_back;
     private DateFormat dateFormat, dateFormat2;
     private SimpleDateFormat simpleDateFormat, simpleDateFormat2;
     private String start_time;
     private String end_time;
-    private String ipadd;
 
 
     @Override
@@ -113,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         Date date = calendar.getTime();
                         SHORT.setText(String.valueOf(dateFormat.format(date)));
                         SECOND.setText(simpleDateFormat.format(date));
-                        setTitle(String.valueOf(dateFormat2.format(date)) + "     " + ipadd);
+                        setTitle(String.valueOf(dateFormat2.format(date)) + "     " + get_MAC_IP());
                         String temp = simpleDateFormat2.format(date);
                         if (temp.compareTo(start_time) > 0 && temp.compareTo(end_time) < 0) {
                             set_HIGH();
@@ -128,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void set_LOW() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         lp.screenBrightness = 0.01F;
         SHORT.setBackgroundColor(Color.BLACK);
         SECOND.setBackgroundColor(Color.BLACK);
@@ -139,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void set_HIGH() {
         if (calendar.get(Calendar.DAY_OF_WEEK) > Calendar.SUNDAY && calendar.get(Calendar.DAY_OF_WEEK) < Calendar.SATURDAY) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             lp.screenBrightness = 1.0F;
             SHORT.setBackgroundColor(Color.WHITE);
             SECOND.setBackgroundColor(Color.TRANSPARENT);
@@ -165,31 +159,20 @@ public class MainActivity extends AppCompatActivity {
         this.start_time = start_time;
     }
 
-    protected void check_node() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            Notification.Builder builder = new Notification.Builder(this, "aa");
-        }
-    }
-
-    protected void get_MAC_IP() {
+    protected String get_MAC_IP() {
         WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        System.out.println("-------------------------------------------");
-        System.out.println(wifiInfo.getMacAddress());
-        System.out.println(wifiInfo);
-        System.out.println("-------------------------------------------");
-
+//        System.out.println("-------------------------------------------");
+//        System.out.println(wifiInfo.getMacAddress());
+//        System.out.println(wifiInfo);
+//        System.out.println("-------------------------------------------");
         int ipAddress = wifiInfo.getIpAddress();
-        System.out.println(wifiInfo.getIpAddress());
-
         String strIPAddess =
                 ((ipAddress >> 0) & 0xFF) + "." +
                         ((ipAddress >> 8) & 0xFF) + "." +
                         ((ipAddress >> 16) & 0xFF) + "." +
                         ((ipAddress >> 24) & 0xFF);
-        Log.v("IP Address", strIPAddess);
-        ipadd = strIPAddess;
+        return strIPAddess + " (" + wifiInfo.getSSID() + ")";
     }
 
 
