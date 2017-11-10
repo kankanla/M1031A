@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void find_db() {
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -215,15 +216,28 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("-----------------------------------------------5------------");
                     System.out.println(bluetoothDevice1.getName());
                     System.out.println(bluetoothDevice1.getAddress());
+                    Toast.makeText(context, bluetoothDevice1.getName(), Toast.LENGTH_SHORT).show();
                     System.out.println("-----------------------------------------------6------------");
                 }
             }
         };
 
+
         IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(broadcastReceiver, intentFilter);
-        bluetoothAdapter.startDiscovery();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (!bluetoothAdapter.isDiscovering()) {
+                        bluetoothAdapter.startDiscovery();
+                    }
+                }
+            }
+        }).start();
 
     }
-
 }
+
+
