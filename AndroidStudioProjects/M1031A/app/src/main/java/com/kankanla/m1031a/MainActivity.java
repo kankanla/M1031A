@@ -1,7 +1,11 @@
 package com.kankanla.m1031a;
 
-import android.app.Notification;
-import android.app.NotificationManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -20,6 +24,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -72,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
 //        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "hassle.ttf"));
 //        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "heroesassembledings.ttf"));
         SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "NINJAS.TTF"));
+
+
+        ////////////////
+        BT_get();
+        find_db();
     }
 
 
@@ -175,5 +185,45 @@ public class MainActivity extends AppCompatActivity {
         return strIPAddess + " (" + wifiInfo.getSSID() + ")";
     }
 
+    protected void BT_get() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        System.out.println("-------------------------------------------------------1----");
+        System.out.println(bluetoothAdapter.enable());
+        System.out.println(bluetoothAdapter.getAddress());
+        System.out.println(bluetoothAdapter.getName());
+        System.out.println("-------------------------------------------------------2----");
+
+        Set<BluetoothDevice> bluetoothDevice = bluetoothAdapter.getBondedDevices();
+        for (BluetoothDevice bluetoothDevice1 : bluetoothDevice) {
+            System.out.println("-------------------------------------------------------3----");
+            System.out.println(bluetoothDevice1.getAddress());
+            System.out.println(bluetoothDevice1.getName());
+            System.out.println("-------------------------------------------------------4----");
+        }
+
+    }
+
+    protected void find_db() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    BluetoothDevice bluetoothDevice1 = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    bluetoothDevice1.getAddress();
+                    System.out.println("-----------------------------------------------5------------");
+                    System.out.println(bluetoothDevice1.getName());
+                    System.out.println(bluetoothDevice1.getAddress());
+                    System.out.println("-----------------------------------------------6------------");
+                }
+            }
+        };
+
+        IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(broadcastReceiver, intentFilter);
+        bluetoothAdapter.startDiscovery();
+
+    }
 
 }
