@@ -14,7 +14,6 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -30,14 +29,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView SHORT, SECOND;
+    private TextView SHORT, SECOND, TDATE;
     private Calendar calendar;
     private Handler handler;
     private Timer timer;
     private TimerTask timerTask;
     private WindowManager.LayoutParams lp;
     private DateFormat dateFormat, dateFormat2;
-    private SimpleDateFormat simpleDateFormat, simpleDateFormat2;
+    private SimpleDateFormat simpleDateFormat, simpleDateFormat2, simpleDateFormat3;
     private String start_time;
     private String end_time;
 
@@ -51,10 +50,14 @@ public class MainActivity extends AppCompatActivity {
         dateFormat2 = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
         simpleDateFormat = new SimpleDateFormat("ss");
         simpleDateFormat2 = new SimpleDateFormat("HHmmss");
+        simpleDateFormat3 = new SimpleDateFormat("D");
+
         handler = new Handler();
         timer = new Timer();
+        TDATE = findViewById(R.id.tdate);
         SHORT = findViewById(R.id.SHORT);
         SECOND = findViewById(R.id.SECOND);
+        TDATE.setTextSize(200);
         App_set();
         get_MAC_IP();
 
@@ -78,11 +81,12 @@ public class MainActivity extends AppCompatActivity {
 //        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "hassle.ttf"));
 //        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "heroesassembledings.ttf"));
         SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "NINJAS.TTF"));
+        TDATE.setTypeface(Typeface.createFromAsset(getAssets(), "Royalacid_o.ttf"));
 
 
-        ////////////////
-        BT_get();
-        find_db();
+        //練習のテスト項目
+//        BT_get();
+//        find_db();
     }
 
 
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         Date date = calendar.getTime();
                         SHORT.setText(String.valueOf(dateFormat.format(date)));
                         SECOND.setText(simpleDateFormat.format(date));
+                        TDATE.setText(simpleDateFormat3.format(date));
                         setTitle(String.valueOf(dateFormat2.format(date)) + "     " + get_MAC_IP());
                         String temp = simpleDateFormat2.format(date);
                         if (temp.compareTo(start_time) > 0 && temp.compareTo(end_time) < 0) {
@@ -186,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         return strIPAddess + " (" + wifiInfo.getSSID() + ")";
     }
 
+    //練習のテスト項目
     protected void BT_get() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         System.out.println("-------------------------------------------------------1----");
@@ -204,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //練習のテスト項目
     protected void find_db() {
         final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
