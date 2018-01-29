@@ -32,4 +32,16 @@
         android:text="date"
         android:textSize="36sp" />
 
+    <TextView
+        android:id="@+id/TEMP"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="temp"
+        android:gravity="right"
+
+        />
+
 </RelativeLayout>

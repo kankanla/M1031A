@@ -20,6 +20,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,16 +32,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView SHORT, SECOND, TDATE;
+    private TextView SHORT, SECOND, TDATE, TEMP;
     private Calendar calendar;
     private Handler handler;
-    private Timer timer;
-    private TimerTask timerTask;
     private WindowManager.LayoutParams lp;
     private DateFormat dateFormat, dateFormat2;
     private SimpleDateFormat simpleDateFormat, simpleDateFormat2, simpleDateFormat3;
     private String start_time;
     private String end_time;
+    private TimerTask timerTask;
+    private Timer timer;
 
 
     @Override
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         TDATE = findViewById(R.id.tdate);
         SHORT = findViewById(R.id.SHORT);
         SECOND = findViewById(R.id.SECOND);
+        TEMP = findViewById(R.id.TEMP);
+        TEMP.setTextSize(200);
         TDATE.setTextSize(200);
         App_set();
         get_MAC_IP();
@@ -82,11 +87,46 @@ public class MainActivity extends AppCompatActivity {
 //        SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "heroesassembledings.ttf"));
         SECOND.setTypeface(Typeface.createFromAsset(getAssets(), "NINJAS.TTF"));
         TDATE.setTypeface(Typeface.createFromAsset(getAssets(), "Royalacid_o.ttf"));
+        TEMP.setTypeface(Typeface.createFromAsset(getAssets(), "Royalacid_o.ttf"));
 
 
-        //練習のテスト項目
+//        練習のテスト項目
 //        BT_get();
 //        find_db();
+//        TempSensors tempSensors = new TempSensors(this);
+//        tempSensors.getSen();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                test_temp(TEMP);
+
+            }
+        };
+
+        timer.schedule(timerTask, 0, 1000 * 60 * 5);
+
+    }
+
+
+    public void test_temp(final TextView textView) {
+        OpenWeatherMap openWeatherMap = new OpenWeatherMap(this, new OpenWeatherMap.Temp_CallBack() {
+            @Override
+            public void show_temp(String json) {
+                System.out.println("9999999999999999999999999999999999999999");
+                System.out.println(json);
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(json);
+                    JSONObject jsonObject1 = (JSONObject) jsonObject.get("main");
+                    System.out.println(jsonObject1.getString("temp"));
+                    textView.setText(jsonObject1.getString("temp"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("9999999999999999999999999999999999999999");
+            }
+        });
+        openWeatherMap.getTemp();
     }
 
 
