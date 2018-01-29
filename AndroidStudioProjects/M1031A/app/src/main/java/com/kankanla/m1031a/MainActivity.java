@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private String end_time;
     private TimerTask timerTask;
     private Timer timer;
+    private TimerTask timerTask2;
+    private Timer timer2;
 
 
     @Override
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         handler = new Handler();
         timer = new Timer();
+        timer2 = new Timer();
         TDATE = findViewById(R.id.tdate);
         SHORT = findViewById(R.id.SHORT);
         SECOND = findViewById(R.id.SECOND);
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 //        find_db();
 //        TempSensors tempSensors = new TempSensors(this);
 //        tempSensors.getSen();
-        timerTask = new TimerTask() {
+        timerTask2 = new TimerTask() {
             @Override
             public void run() {
                 test_temp(TEMP);
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        timer.schedule(timerTask, 0, 1000 * 60 * 5);
+        timer2.schedule(timerTask2, 0, 1000 * 60 * 5);
 
     }
 

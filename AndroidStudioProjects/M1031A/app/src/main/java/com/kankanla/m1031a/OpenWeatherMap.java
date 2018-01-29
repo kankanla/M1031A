@@ -105,7 +105,7 @@ public class OpenWeatherMap {
         @Override
         protected void onPostExecute(String json) {
             super.onPostExecute(json);
-            System.out.println(REQ_URL);    //
+//            System.out.println(REQ_URL);    //
 
 //            try {
 //                JSONObject jsonObject = new JSONObject(json);
