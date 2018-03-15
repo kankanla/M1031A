@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private WindowManager.LayoutParams lp;
     private DateFormat dateFormat, dateFormat2;
-    private SimpleDateFormat simpleDateFormat, simpleDateFormat2, simpleDateFormat3;
+    private SimpleDateFormat simpleDateFormat, simpleDateFormat2, simpleDateFormat3 ,simpleDateFormat4;
     private String start_time;
     private String end_time;
     private TimerTask timerTask;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         simpleDateFormat = new SimpleDateFormat("ss");
         simpleDateFormat2 = new SimpleDateFormat("HHmmss");
         simpleDateFormat3 = new SimpleDateFormat("D");
+        simpleDateFormat4 = new SimpleDateFormat("d");
 
         handler = new Handler();
         timer = new Timer();
@@ -102,14 +104,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 test_temp(TEMP);
-
             }
         };
 
-        timer2.schedule(timerTask2, 0, 1000 * 60 * 5);
+        timer2.schedule(timerTask2, 0, 1000 * 30);
+
+
 
     }
 
+    //テストファンクション
 
     public void test_temp(final TextView textView) {
         OpenWeatherMap openWeatherMap = new OpenWeatherMap(this, new OpenWeatherMap.Temp_CallBack() {
@@ -163,8 +167,8 @@ public class MainActivity extends AppCompatActivity {
                         Date date = calendar.getTime();
                         SHORT.setText(String.valueOf(dateFormat.format(date)));
                         SECOND.setText(simpleDateFormat.format(date));
-                        TDATE.setText(simpleDateFormat3.format(date));
-                        setTitle(String.valueOf(dateFormat2.format(date)) + "     " + get_MAC_IP());
+                        TDATE.setText(simpleDateFormat4.format(date) + "-" + simpleDateFormat3.format(date));
+                        setTitle(String.valueOf(dateFormat2.format(date)) + "     " + get_MAC_IP() + "   " + get_MAC_add());
                         String temp = simpleDateFormat2.format(date);
                         if (temp.compareTo(start_time) > 0 && temp.compareTo(end_time) < 0) {
                             set_HIGH();
@@ -233,6 +237,15 @@ public class MainActivity extends AppCompatActivity {
                         ((ipAddress >> 24) & 0xFF);
         return strIPAddess + " (" + wifiInfo.getSSID() + ")";
     }
+
+    protected String get_MAC_add(){
+        String MAC_ADD = new String();
+        WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(WIFI_SERVICE);
+        MAC_ADD = wifiManager.getConnectionInfo().getMacAddress();
+        return MAC_ADD;
+    }
+
+
 
     //練習のテスト項目
     protected void BT_get() {
