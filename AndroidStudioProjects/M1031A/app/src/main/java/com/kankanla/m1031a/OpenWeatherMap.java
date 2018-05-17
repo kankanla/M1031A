@@ -89,7 +89,7 @@ public class OpenWeatherMap {
 //                URL
                 e.printStackTrace();
             } catch (IOException e) {
-//                httpURLConnection
+              System.out.println("  httpURLConnection 777777777777777777777777777777777777");
                 e.printStackTrace();
             }
 
